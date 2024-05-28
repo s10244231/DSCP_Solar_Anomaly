@@ -49,33 +49,23 @@ if st.sidebar.button('Enter'):
     # Group the DataFrame by 'Status' and count the size of each group
     status_counts = filtered_df.groupby('Status').size().reset_index(name='counts')
     
-    # Create the vertical bar plot using Plotly
-    fig_bar = px.bar(status_counts, x='Status', y='counts', 
-                     color='Status', text='counts', color_discrete_sequence=px.colors.qualitative.Dark2)
+    # Create the pie chart using Plotly
+    fig_pie = px.pie(status_counts, values='counts', names='Status', title='Status Distribution',
+                     color_discrete_sequence=['rgb(0,128,0)', 'rgb(255,215,0)', 'rgb(220,20,60)'])
     
-    # Update the layout to show the legend and hide the top and right spines (axes)
-    fig_bar.update_layout(
-        showlegend=True,
-        xaxis=dict(showline=True, showgrid=False, showticklabels=True, zeroline=False),
-        yaxis=dict(showline=True, showgrid=False, showticklabels=True, zeroline=False),
-        plot_bgcolor='white'
-    )
-    
-    # Update the trace to format the text position
-    fig_bar.update_traces(textposition='auto')
-    
-    # Display the status count plot and table side by side
+    # Create a column layout for the table and pie chart
     col1, col2 = st.columns([1, 1])
-    with col1:
-        st.plotly_chart(fig_bar)
     
+    # Display the pie chart in the first column and the table in the second column
+    with col1:
+        st.plotly_chart(fig_pie)
     with col2:
         st.subheader("Anomaly Readings and Underperforming Data")
         st.write(filtered_df[filtered_df['Status'].isin(['Anomaly Reading', 'Underperforming'])])
     
     # Create the line chart using Plotly
     fig_line = go.Figure()
-    for status, color in zip(['Anomaly Reading', 'Normal', 'Underperforming'], ['green', 'orange', 'purple']):
+    for status, color in zip(['Anomaly Reading', 'Normal', 'Underperforming'], ['rgb(220,20,60)', 'rgb(0,128,0)', 'rgb(255,215,0)']):
         df_status = filtered_df[filtered_df['Status'] == status]
         fig_line.add_trace(go.Scatter(x=df_status['Date and Time'], y=df_status['Energy kWh'], mode='lines+markers', name=status, line=dict(color=color)))
     
@@ -86,5 +76,5 @@ if st.sidebar.button('Enter'):
         plot_bgcolor='white'
     )
     
-    # Display the line chart below the count plot and table
+    # Display the line chart below the pie chart and table
     st.plotly_chart(fig_line)
