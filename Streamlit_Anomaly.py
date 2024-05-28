@@ -23,7 +23,7 @@ df['Status'] = df.apply(
 )
 
 # Streamlit app layout
-st.title("Solar Weather Data Analysis")
+st.title("Solar Data Anomaly Detection")
 
 # Date input from user
 st.sidebar.title("Filters")
