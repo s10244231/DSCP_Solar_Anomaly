@@ -50,7 +50,7 @@ if st.sidebar.button('Enter'):
     status_counts = filtered_df.groupby('Status').size().reset_index(name='counts')
     
     # Create the pie chart using Plotly
-    fig_pie = px.pie(status_counts, values='counts', names='Status', title='Status Distribution',
+    fig_pie = px.pie(status_counts, values='counts', names='Status', title='Distribution of Status',
                      color_discrete_sequence=['rgb(0,128,0)', 'rgb(255,215,0)', 'rgb(220,20,60)'])
     
     # Create a column layout for the table and pie chart
@@ -78,3 +78,9 @@ if st.sidebar.button('Enter'):
     
     # Display the line chart below the pie chart and table
     st.plotly_chart(fig_line)
+
+# Explanations
+st.sidebar.markdown("""
+**Underperforming** - Performance Ratio (PR%) is below 80%  
+**Anomaly Reading** - Energy generated is more than expected value
+""")
